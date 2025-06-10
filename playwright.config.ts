@@ -23,17 +23,17 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? undefined : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ["list"],
+    ["list"], // for local terminal
     ["json", { outputFile: "playwright-report/test-results.json" }],
-    ["html", { open: "never" }],
-    ["junit", { outputFile: "junitReports/reports.xml" }],
+    ["html", { open: "never" }], // for local and pipeline downloadble for public access
+    ["junit", { outputFile: "junitReports/reports.xml" }], // for pipelines
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    headless: false,
+    headless: process.env.CI ? true : false, // push to CI/CD as true always
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: process.env.baseURL,
 
@@ -47,6 +47,7 @@ export default defineConfig({
       name: "SmartBear E2E Tests - Chrome",
       testDir: "./tests/e2e-tests",
       dependencies: ["SmartBear Setup Tests"],
+      // below we overwrite use set globally for this specific project
       use: {
         ...devices["Desktop Chrome"],
         baseURL: process.env.baseURL,
@@ -58,6 +59,14 @@ export default defineConfig({
     {
       name: "SmartBear Setup Tests",
       testDir: "./tests/setup",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: process.env.loginURL,
+      },
+    },
+    {
+      name: "SmartBear Authentication Tests",
+      testDir: "./tests/login-tests",
       use: {
         ...devices["Desktop Chrome"],
         baseURL: process.env.loginURL,
