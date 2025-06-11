@@ -8,22 +8,9 @@ on:
     - cron: "0 12 * * *"
 
 jobs:
-  test:
+  testE2E:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    name: "Testing ${{ matrix.project }} (${{ matrix.shardIndex }} / ${{ matrix.shardTotal }})"
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - project: SmartBear E2E Tests - Chrome
-            testDir: tests/e2e-tests
-          - project: SmartBear Setup Tests
-            testDir: tests/setup
-          - project: SmartBear Authentication Test
-            testDir: tests/login-tests
-        shardIndex: [1, 2, 3]
-        shardTotal: [3]
     env:
       baseURL: ${{ vars.BASEURL }}
       loginURL: ${{ vars.LOGINURL }}
@@ -37,21 +24,34 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        # run: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }} / ${{ matrix.shardTotal }}
-        # run: npx playwright test tests/e2e-tests
-        run: npx playwright test --project="${{ matrix.project }}" --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-      - name: Upload Playwright report
-        if: ${{ !cancelled() && matrix.project != 'SmartBear Setup Tests' }}
-        uses: actions/upload-artifact@v4
+        run: npx playwright test tests/e2e-tests
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
-          name: playwright-report-${{ matrix.project }}-${{ matrix.shardIndex }}
+          name: playwright-report-e2e
           path: playwright-report/
           retention-days: 30
-      # - name: Upload Playwright report
-      #   uses: actions/upload-artifact@v4
-      #   if: ${{ !cancelled() }}
-      #   with:
-      #     # name: playwright-report-${{ matrix.project }}-${{ matrix.shardIndex }}
-      #     name: playwright-report
-      #     path: playwright-report/
-      #     retention-days: 30
+
+  testLogin:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      baseURL: ${{ vars.BASEURL }}
+      loginURL: ${{ vars.LOGINURL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test tests/login-tests --update-snapshots
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-login
+          path: playwright-report/
+          retention-days: 30
