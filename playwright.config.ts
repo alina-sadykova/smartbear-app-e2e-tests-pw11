@@ -28,7 +28,7 @@ export default defineConfig({
   reporter: [
     ["list"], // for local terminal
     ["json", { outputFile: "playwright-report/test-results.json" }],
-    ["html", { open: "never" }], // for local and pipeline downloadble for public access
+    ["html", { outputFolder: "playwright-report", open: "never" }], // for local and pipeline downloadble for public access
     ["junit", { outputFile: "junitReports/reports.xml" }], // for pipelines
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
