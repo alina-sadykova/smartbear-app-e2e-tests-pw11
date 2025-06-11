@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-      project:
-        [
-          SmartBear E2E Tests - Chrome,
-          SmartBear Setup Tests,
-          SmartBear Authentication Test,
-        ]
+        project:
+          [
+            SmartBear E2E Tests - Chrome,
+            SmartBear Setup Tests,
+            SmartBear Authentication Test,
+          ]
     env:
       baseURL: ${{ vars.BASEURL }}
       loginURL: ${{ vars.LOGINURL }}
