@@ -13,12 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project:
-          [
-            SmartBear E2E Tests - Chrome,
-            SmartBear Setup Tests,
-            SmartBear Authentication Test,
-          ]
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
     env:
       baseURL: ${{ vars.BASEURL }}
       loginURL: ${{ vars.LOGINURL }}
@@ -32,12 +28,12 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: npx playwright test --project=${{ matrix.prject }}
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix,shardTotal}}
         # run: npx playwright test tests/e2e-tests
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report-${{ matrix.project }}
+          name: playwright-report-${{ matrix.shardIndex }}
           # name: playwright-report
           path: playwright-report/
           retention-days: 30
