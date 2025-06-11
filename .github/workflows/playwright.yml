@@ -16,11 +16,9 @@ jobs:
       fail-fast: false
       matrix:
         project:
-          [
-            SmartBear E2E Tests - Chrome,
-            SmartBear Setup Tests,
-            SmartBear Authentication Test,
-          ]
+          - SmartBear E2E Tests - Chrome
+          - SmartBear Setup Tests
+          - SmartBear Authentication Test
         shardIndex: [1, 2, 3]
         shardTotal: [3]
     env:
@@ -37,12 +35,20 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         # run: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }} / ${{ matrix.shardTotal }}
-        run: npx playwright test tests/e2e-tests
+        # run: npx playwright test tests/e2e-tests
+        run: npx playwright test --project="${{ matrix.project }}" --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
       - name: Upload Playwright report
+        if: ${{ !cancelled() && matrix.project != 'SmartBear Setup Tests' }}
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
         with:
-          # name: playwright-report-${{ matrix.project }}-${{ matrix.shardIndex }}
-          name: playwright-report
+          name: playwright-report-${{ matrix.project }}-${{ matrix.shardIndex }}
           path: playwright-report/
           retention-days: 30
+      # - name: Upload Playwright report
+      #   uses: actions/upload-artifact@v4
+      #   if: ${{ !cancelled() }}
+      #   with:
+      #     # name: playwright-report-${{ matrix.project }}-${{ matrix.shardIndex }}
+      #     name: playwright-report
+      #     path: playwright-report/
+      #     retention-days: 30
