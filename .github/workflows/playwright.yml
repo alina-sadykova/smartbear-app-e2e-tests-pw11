@@ -15,10 +15,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project:
-          - SmartBear E2E Tests - Chrome
-          - SmartBear Setup Tests
-          - SmartBear Authentication Test
+        include:
+          - project: SmartBear E2E Tests - Chrome
+            testDir: tests/e2e-tests
+          - project: SmartBear Setup Tests
+            testDir: tests/setup
+          - project: SmartBear Authentication Test
+            testDir: tests/login-tests
         shardIndex: [1, 2, 3]
         shardTotal: [3]
     env:
