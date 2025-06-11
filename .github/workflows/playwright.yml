@@ -8,7 +8,7 @@ on:
     - cron: "0 12 * * *"
 
 jobs:
-  testE2E:
+  test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
@@ -24,34 +24,67 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: npx playwright test tests/e2e-tests
+        run: npx playwright test tests/e2e-tests tests/login-tests
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report-e2e
+          name: playwright-report
           path: playwright-report/
           retention-days: 30
+# name: SmartBear Tests
+# on:
+#   push:
+#     branches: [main, master]
+#   pull_request:
+#     branches: [main, master]
+#   schedule:
+#     - cron: "0 12 * * *"
 
-  testLogin:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    env:
-      baseURL: ${{ vars.BASEURL }}
-      loginURL: ${{ vars.LOGINURL }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: npx playwright test tests/login-tests --update-snapshots
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report-login
-          path: playwright-report/
-          retention-days: 30
+# jobs:
+#   testE2E:
+#     timeout-minutes: 60
+#     runs-on: ubuntu-latest
+#     env:
+#       baseURL: ${{ vars.BASEURL }}
+#       loginURL: ${{ vars.LOGINURL }}
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: lts/*
+#       - name: Install dependencies
+#         run: npm ci
+#       - name: Install Playwright Browsers
+#         run: npx playwright install --with-deps
+#       - name: Run Playwright tests
+#         run: npx playwright test tests/e2e-tests
+#       - uses: actions/upload-artifact@v4
+#         if: ${{ !cancelled() }}
+#         with:
+#           name: playwright-report-e2e
+#           path: playwright-report/
+#           retention-days: 30
+
+#   testLogin:
+#     timeout-minutes: 60
+#     runs-on: ubuntu-latest
+#     env:
+#       baseURL: ${{ vars.BASEURL }}
+#       loginURL: ${{ vars.LOGINURL }}
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: lts/*
+#       - name: Install dependencies
+#         run: npm ci
+#       - name: Install Playwright Browsers
+#         run: npx playwright install --with-deps
+#       - name: Run Playwright tests
+#         run: npx playwright test tests/login-tests --update-snapshots
+#       - uses: actions/upload-artifact@v4
+#         if: ${{ !cancelled() }}
+#         with:
+#           name: playwright-report-login
+#           path: playwright-report/
+#           retention-days: 30
