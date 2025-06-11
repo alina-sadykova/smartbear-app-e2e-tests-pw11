@@ -5,7 +5,7 @@ async function globalSetup() {
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  await page.goto("/");
+  await page.goto("");
 
   await page.getByRole("textbox", { name: "Username:" }).fill("Tester");
   await page.getByRole("textbox", { name: "Password:" }).fill("test");

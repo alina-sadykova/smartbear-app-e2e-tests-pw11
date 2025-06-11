@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("Login and save storage state", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("");
 
   await page.getByRole("textbox", { name: "Username:" }).fill("Tester");
   await page.getByRole("textbox", { name: "Password:" }).fill("test");
