@@ -1,6 +1,7 @@
 import { expect, test } from "./../../fixtures/PageObject";
 
 import { ScreenshotUtils } from "../../utils/ScreenshotUtils";
+import { Snapshots } from "../../test-snapshots/Snapshots";
 
 test.describe("SmartBear App Login Page visual verification @Login @Smoke", () => {
   test("Login Page Visual Regression", async ({ loginPage }) => {
@@ -11,15 +12,8 @@ test.describe("SmartBear App Login Page visual verification @Login @Smoke", () =
   test("SmartBear App Login Page snapshot verification", async ({
     loginPage,
   }) => {
-    await expect(loginPage.loginForm).toMatchAriaSnapshot(`
-      - paragraph
-      - text: "Username:"
-      - textbox "Username:"
-      - text: "Password:"
-      - textbox "Password:"
-      - button "Login"
-      - paragraph: "In order to log in Orders sample use the following information:"
-      - paragraph: Username - Tester Password - test
-      `);
+    await expect(loginPage.loginForm).toMatchAriaSnapshot(
+      Snapshots.loginFormDefault
+    );
   });
 });

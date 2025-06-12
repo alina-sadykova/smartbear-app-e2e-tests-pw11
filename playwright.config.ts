@@ -28,7 +28,7 @@ export default defineConfig({
   reporter: [
     ["list"], // for local terminal
     ["json", { outputFile: "playwright-report/test-results.json" }],
-    ["html", { outputFolder: "playwright-report", open: "never" }], // for local and pipeline downloadble for public access
+    ["html", { open: "never" }], // for local and pipeline downloadble for public access
     ["junit", { outputFile: "junitReports/reports.xml" }], // for pipelines
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -65,7 +65,7 @@ export default defineConfig({
       },
     },
     {
-      name: "SmartBear Authentication Tests",
+      name: "SmartBear Login Tests",
       testDir: "./tests/login-tests",
       use: {
         ...devices["Desktop Chrome"],

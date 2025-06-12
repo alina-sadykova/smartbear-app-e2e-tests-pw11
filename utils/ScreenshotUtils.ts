@@ -6,9 +6,9 @@ export class ScreenshotUtils {
    * Fails the test if visual difference  detected
    * @param page is PW page object
    */
-  static async takeScreenshot(page: Page, fullPage = true) {
+  static async takeScreenshot(page: Page, isFullPage = true) {
     await expect(page).toHaveScreenshot({
-      fullPage,
+      fullPage: isFullPage,
     });
   }
 }

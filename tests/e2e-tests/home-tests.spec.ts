@@ -1,9 +1,8 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./../../fixtures/PageObject";
 
 test.describe("Home Page verification", () => {
-  test("Validate title and url", async ({ page }) => {
-    await page.goto("");
-    expect(page.url()).toContain("/weborders/");
-    expect(await page.title()).toContain("Web Orders");
+  test("Validate title and url", async ({ basePage }) => {
+    expect(basePage.page.url()).toContain("/weborders/");
+    expect(await basePage.page.title()).toContain("Web Orders");
   });
 });
